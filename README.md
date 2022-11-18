@@ -32,7 +32,7 @@ The easiest way to start displaying cool stuff on Galactic Unicorn is using our 
 [clock_mod.py](clock_mod.py)
 
 
-Modified clock example by @PaulskPt, using timed NTP synchronization. You can adjust the brightness with LUX + and -. Resync of the time is now done at intervals determined by the value of the variable 'interval_secs' in main(), line 648, default 600 seconds. Button A re-arranged. Buttons B, C and D added. Button A: increase hours; button B: decrease hours; button C: increase minutes; button D: decrease minutes. When you change hours and/or minutes, using buttons A thru D, the NTP syncing will be halted. This is done to prevent that a next NTP sync will undo your time alteration.
+Modified clock example by @PaulskPt, using timed NTP synchronization. You can adjust the brightness with LUX + and -. Adjust the audio volume with VOL + amd -. Resync of the time is now done at intervals determined by the value of the variable 'interval_secs' in main(), line 648, default 600 seconds. Button A re-arranged. Buttons B, C and D added. Button A: increase hours; button B: decrease hours; button C: increase minutes; button D: decrease minutes. When you change hours and/or minutes, using buttons A thru D, the NTP syncing will be halted. This is done to prevent that a next NTP sync will undo your time alteration. 
 
 Added Global variables: 
 - 'classic': (default False) If True: the color scheme of the the original Pimoroni clock script version for the
