@@ -45,17 +45,17 @@ Added Global variables:
   
 - The following global variables are taken from the file 'clock_mod_secrets.py':
 ```
-- +------------------+---------------------------+---------------------------------------------------------------------+
-- | Global           | value from key ...        |                                                                     |
-- | variable:        | in 'clock_mod_secrets.py' |  use:                                                               |
-- +------------------+---------------------------+---------------------------------------------------------------------+
-- | country          |    COUNTRY                |  to replace decimal '.' by ',' if country != "USA"                  |
-- +------------------+---------------------------+---------------------------------------------------------------------+
-  | utc_offset       |    TZ_OFFSET              |  to calculate the localtime. Offet in hours e.g. N.Y should be -5   |
-  +------------------+---------------------------+---------------------------------------------------------------------+
-  | ntp_server       |    NTP_SERVER             |  if you want your own server. Default is set to "pool.ntp.org"      |
-  +------------------+---------------------------+---------------------------------------------------------------------+
-  ```
+ +------------------+---------------------------+---------------------------------------------------------------------+
+ | Global           | value from key ...        |                                                                     |
+ | variable:        | in 'clock_mod_secrets.py' |  use:                                                               |
+ +------------------+---------------------------+---------------------------------------------------------------------+
+ | country          |    COUNTRY                |  to replace decimal '.' by ',' if country != "USA"                  |
+ +------------------+---------------------------+---------------------------------------------------------------------+
+ | utc_offset       |    TZ_OFFSET              |  to calculate the localtime. Offet in hours e.g. N.Y should be -5   |
+ +------------------+---------------------------+---------------------------------------------------------------------+
+ | ntp_server       |    NTP_SERVER             |  if you want your own server. Default is set to "pool.ntp.org"      |
+ +------------------+---------------------------+---------------------------------------------------------------------+
+ ```
 
 This example uses different character definitions. The characters are defined in the file 'clock_mod_digits.py'. At the end of this file is defined a 'img_dict', which contains info about the defined characters, all except one are digits, as well as the 'width' each of them occupies. The use of a different character set in combination with other color schemes gives you a more 'quiet' view experience. The original version is very nice, colorful and adjusted to ambient light, however that example gives a 'nervous' experience because pixels of the background colours surrounding and in between the digits are frequently moving. This 'effect' I didn't like. It was one of the reasons for me to write the 'clock_mod' example script. I also didn't like the way the 'colon' character was defined' (too much shifted upwards). I made the colon also wider.
 
