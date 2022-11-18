@@ -93,7 +93,7 @@ use_sound = True
 if not classic:
     from clock_mod_digits import *
 
-use_fixed_color = True
+use_fixed_color = False
 
 vol_set = False
 
