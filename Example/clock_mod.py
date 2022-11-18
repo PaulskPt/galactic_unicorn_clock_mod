@@ -13,6 +13,13 @@
 # 2022-11-13 by @PaulskPt (Github)
 # This is a modified version:
 # The following changes have been done:
+# We use the filename 'clock_mod_secrets.py' instead of: 'secrets.py'
+# Beside the WIFI_SSID and WIFI_PASSWORD
+# the file 'clock_mod_secrets.py should also contain:
+# COUNTRY = "PT"  # or "USA"
+# TZ_OFFSET = 0   # offset from utc in hours. ntp.settime Defaults to timezone 8
+# NTP_SERVER = "0.pt.pool.ntp.org" # or your favorite NTP server. ntp.settime() detaults to "ntp.ntsc.ac.cn"
+# Added:
 # Button A: increase hour
 # Button B: decrease hour
 # Button C: increase minute
@@ -53,7 +60,7 @@ from galactic import GalacticUnicorn, Channel
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 try:
-    from clock_mod_secrets import WIFI_SSID, WIFI_PASSWORD, COUNTRY, TZ_OFFSET
+    from clock_mod_secrets import WIFI_SSID, WIFI_PASSWORD, COUNTRY, TZ_OFFSET, NTP_SERVER
     wifi_available = True
 except ImportError:
     print("Create secrets.py with your WiFi credentials to get time from NTP")
@@ -75,6 +82,7 @@ do_sync = True # Built-in RTC will be updated at intervals by NTP datetime
 # NTP synchronizes the time to UTC, this allows you to adjust the displayed time
 # by one hour increments from UTC by pressing the volume up/down buttons
 utc_offset = TZ_OFFSET
+ntp_server = NTP_SERVER
 
 img_dict = {} # to prevent error. dictionary will be loaded from digits.py
 
@@ -464,6 +472,12 @@ def sync_time():
     if max_wait > 0:
         is_connected(TAG)
         try:
+            # See: https://forum.micropython.org/viewtopic.php?t=5776
+            # and: https://github.com/micropython/micropython-infineon/blob/master/esp8266/scripts/ntptime.py
+            # The NTP host can be configured at runtime by doing: ntptime.host = 'myhost.org'
+            ntptime.host = ntp_server
+            if not my_debug:
+                print(TAG+f"using ntptime.host = \'{ntp_server}\'")
             ntptime.settime()
             if use_sound:
                 double_tone()
@@ -492,7 +506,7 @@ def sync_time():
 # 
 def epoch():
     year, month, day, wd, hour, minute, second, _ = rtc.datetime()
-    secs = (day*(24*3600))+(hour*3600)+(minute*60)+second
+    secs = (day*(24*3600))+(hour*3600)+(minute*60)+second + (utc_offset*3600)
     if my_debug:
         print(f"epoch(): seconds= {secs}")
     return secs
@@ -733,7 +747,7 @@ def main():
                 adjust_minute(gu.SWITCH_D)
                 
             if gu.is_pressed(gu.SWITCH_SLEEP):
-                text = "Resetting..."
+                text = "Reset..."
                 print("Going to reset...")
                 stop = True
                 gr.set_pen(gr.create_pen(0, 0, 0))

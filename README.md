@@ -32,18 +32,28 @@ The easiest way to start displaying cool stuff on Galactic Unicorn is using our 
 [clock_mod.py](clock_mod.py)
 
 
-Modified clock example by @PaulskPt, using timed NTP synchronization. You can adjust the brightness with LUX + and -. Resync of the time is now done at intervals determined by the value of the variable 'interval_secs' in main(), line 545, default 600 seconds. Button A re-arranged. Buttons B, C and D added. Button A: increase hours; button B: decrease hours; button C: increase minutes; button D: decrease minutes. When you change hours and/or minutes, using buttons A thru D, the NTP syncing will be halted. This is done to prevent that a next NTP sync will undo your time alteration.
+Modified clock example by @PaulskPt, using timed NTP synchronization. You can adjust the brightness with LUX + and -. Resync of the time is now done at intervals determined by the value of the variable 'interval_secs' in main(), line 646, default 600 seconds. Button A re-arranged. Buttons B, C and D added. Button A: increase hours; button B: decrease hours; button C: increase minutes; button D: decrease minutes. When you change hours and/or minutes, using buttons A thru D, the NTP syncing will be halted. This is done to prevent that a next NTP sync will undo your time alteration.
 
 Added Global variables: 
-- 'classic': (default False) If True: the color scheme of the the original Pimoroni clock script version for the Galactic Universe device is used.
-   If False you have an option: see 'use_fixed_color' below.
-- 'use_fixed_color: (default: False) (line 77). If True, set your favorite color with variable 'clr_idx' (line 149), e.g.: 'clr_idx = pink_'. 
+- 'classic': (default False) If True: the color scheme of the the original Pimoroni clock script version for the
+   Galactic Universe device is used. If False you have an option: see 'use_fixed_color' below.
+- 'use_fixed_color: (default: False) (line 94). If True, set your favorite color with variable 'clr_idx' (line 149), e.g.: 'clr_idx = pink_'. 
    If True. One color (defaults: foreground: red, background: black) is used. If False: color change at intervals.
    The color changes after an NTP sync moment. All foreground colors go with a black background color, except when foregrond color is black, the background will be white.
 - 'my_debug': (default False) If True more information will be printed to the REPL.
 - 'do_sync': (default True) this boolean variable is used to inhibit NTP sync after an hour/minute change by the user.
-- 'country'. It takes the value from the key 'COUNTRY' in the file 'clock_mod_secrets.py'. It is used to replace decimal '.' by ',' if country=='PT'.
-  You can put there your country code, e.g.: 'USA'.
+  
+- The following global variables are taken from the file 'clock_mod_secrets.py':
+- +------------------+---------------------------+---------------------------------------------------------------------+
+- | Global           | value from key ...        |                                                                     |
+- | variable:        | in 'clock_mod_secrets.py' |  use:                                                               |
+- +------------------+---------------------------+---------------------------------------------------------------------+
+- | country          |    COUNTRY                |  to replace decimal '.' by ',' if country != "USA"                  |
+- +------------------+---------------------------+---------------------------------------------------------------------+
+  | utc_offset       |    TZ_OFFSET              |  to calculate the localtime. Offet in hours e.g. N.Y should be -5   |
+  +------------------+---------------------------+---------------------------------------------------------------------+
+  | ntp_server       |    NTP_SERVER             |  if you want your own server. Default is set to "pool.ntp.org"      |
+  +------------------+---------------------------+---------------------------------------------------------------------+
 
 This example uses different character definitions. The characters are defined in the file 'clock_mod_digits.py'. At the end of this file is defined a 'img_dict', which contains info about the defined characters, all except one are digits, as well as the 'width' each of them occupies. The use of a different character set in combination with other color schemes gives you a more 'quiet' view experience. The original version is very nice, colorful and adjusted to ambient light, however that example gives a 'nervous' experience because pixels of the background colours surrounding and in between the digits are frequently moving. This 'effect' I didn't like. It was one of the reasons for me to write the 'clock_mod' example script. I also didn't like the way the 'colon' character was defined' (too much shifted upwards). I made the colon also wider.
 
