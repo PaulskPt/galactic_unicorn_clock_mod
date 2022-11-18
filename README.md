@@ -59,13 +59,18 @@ Added Global variables:
 
 This example uses different character definitions. The characters are defined in the file 'clock_mod_digits.py'. At the end of this file is defined a 'img_dict', which contains info about the defined characters, all except one are digits, as well as the 'width' each of them occupies. The use of a different character set in combination with other color schemes gives you a more 'quiet' view experience. The original version is very nice, colorful and adjusted to ambient light, however that example gives a 'nervous' experience because pixels of the background colours surrounding and in between the digits are frequently moving. This 'effect' I didn't like. It was one of the reasons for me to write the 'clock_mod' example script. I also didn't like the way the 'colon' character was defined' (too much shifted upwards). I made the colon also wider.
 
+Removed function:
+- adjust_utc_offset()
+
 Added functions:
+- play_tone();
+- double_tone();
 - my_dev(): collects the os.uname() into global 'dev_dict' dictionary. Data as: 'machine', (micropython) release and version;
+- blink(): blinks a 2x2 pixel square in the top-left corner to indicate WiFi connected (green), WiFi disconnected (red). time_sync (blue).
+- is_connected: prints to REPL info about the WiFi connection status (connected/disconnected);
 - epoch(): returns number of seconds derived from: time.time() + (utc_offset * 3600) value. It is used in main() for time-controlled actions.
 - adjust_hour(): self evident;
 - adjust_minute(): same;
-- is_connected: prints to REPL info about the WiFi connection status (connected/disconnected);
-- blink(): blinks a 2x2 pixel square in the top-left corner to indicate WiFi connected (green), WiFi disconnected (red). time_sync (blue).
 - hdg(): prints a header to the REPL. Prints also clock, time_to_sync and percent_to_midday values.
 - main(): contains the main loop
 
