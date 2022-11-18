@@ -37,7 +37,7 @@ Modified clock example by @PaulskPt, using timed NTP synchronization. You can ad
 Added Global variables: 
 - 'classic': (default False) If True: the color scheme of the the original Pimoroni clock script version for the
    Galactic Universe device is used. If False you have an option: see 'use_fixed_color' below.
-- 'use_fixed_color: (default: False) (line 96). If True, set your favorite color with variable 'clr_idx' (line 149), e.g.: 'clr_idx = pink_'. 
+- 'use_fixed_color: (default: False) (line 96). If True, set your favorite color with variable 'clr_idx' (line 171), e.g.: 'clr_idx = pink_'. 
    If True. One color (defaults: foreground: red, background: black) is used. If False: color change at intervals.
    The color changes after an NTP sync moment. All foreground colors go with a black background color, except when foregrond color is black, the background will be white.
 - 'my_debug': (default False) If True more information will be printed to the REPL.
