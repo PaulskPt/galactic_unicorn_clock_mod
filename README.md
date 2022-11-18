@@ -32,12 +32,12 @@ The easiest way to start displaying cool stuff on Galactic Unicorn is using our 
 [clock_mod.py](clock_mod.py)
 
 
-Modified clock example by @PaulskPt, using timed NTP synchronization. You can adjust the brightness with LUX + and -. Resync of the time is now done at intervals determined by the value of the variable 'interval_secs' in main(), line 646, default 600 seconds. Button A re-arranged. Buttons B, C and D added. Button A: increase hours; button B: decrease hours; button C: increase minutes; button D: decrease minutes. When you change hours and/or minutes, using buttons A thru D, the NTP syncing will be halted. This is done to prevent that a next NTP sync will undo your time alteration.
+Modified clock example by @PaulskPt, using timed NTP synchronization. You can adjust the brightness with LUX + and -. Resync of the time is now done at intervals determined by the value of the variable 'interval_secs' in main(), line 648, default 600 seconds. Button A re-arranged. Buttons B, C and D added. Button A: increase hours; button B: decrease hours; button C: increase minutes; button D: decrease minutes. When you change hours and/or minutes, using buttons A thru D, the NTP syncing will be halted. This is done to prevent that a next NTP sync will undo your time alteration.
 
 Added Global variables: 
 - 'classic': (default False) If True: the color scheme of the the original Pimoroni clock script version for the
    Galactic Universe device is used. If False you have an option: see 'use_fixed_color' below.
-- 'use_fixed_color: (default: False) (line 94). If True, set your favorite color with variable 'clr_idx' (line 149), e.g.: 'clr_idx = pink_'. 
+- 'use_fixed_color: (default: False) (line 96). If True, set your favorite color with variable 'clr_idx' (line 171), e.g.: 'clr_idx = pink_'. 
    If True. One color (defaults: foreground: red, background: black) is used. If False: color change at intervals.
    The color changes after an NTP sync moment. All foreground colors go with a black background color, except when foregrond color is black, the background will be white.
 - 'my_debug': (default False) If True more information will be printed to the REPL.
@@ -53,7 +53,7 @@ Added Global variables:
  +------------------+---------------------------+---------------------------------------------------------------------+
  | utc_offset       |    TZ_OFFSET              |  to calculate the localtime. Offet in hours e.g. N.Y should be -5   |
  +------------------+---------------------------+---------------------------------------------------------------------+
- | ntp_server       |    NTP_SERVER             |  if you want your own server. Default is set to "pool.ntp.org"      |
+ | ntp_server       |    NTP_SERVER             |  define here your NTP server. Default is set to "pool.ntp.org"      |
  +------------------+---------------------------+---------------------------------------------------------------------+
  ```
 
@@ -61,7 +61,7 @@ This example uses different character definitions. The characters are defined in
 
 Added functions:
 - my_dev(): collects the os.uname() into global 'dev_dict' dictionary. Data as: 'machine', (micropython) release and version;
-- epoch(): returns a quasi unix epoch value, used in main() for time-controlled actions.
+- epoch(): returns number of seconds derived from: time.time() + (utc_offset * 3600) value. It is used in main() for time-controlled actions.
 - adjust_hour(): self evident;
 - adjust_minute(): same;
 - is_connected: prints to REPL info about the WiFi connection status (connected/disconnected);

@@ -17,8 +17,10 @@
 # Beside the WIFI_SSID and WIFI_PASSWORD
 # the file 'clock_mod_secrets.py should also contain:
 # COUNTRY = "PT"  # or "USA"
-# TZ_OFFSET = 0   # offset from utc in hours. ntp.settime Defaults to timezone 8
-# NTP_SERVER = "0.pt.pool.ntp.org" # or your favorite NTP server. ntp.settime() detaults to "ntp.ntsc.ac.cn"
+# TZ_OFFSET = 0   # offset from utc in hours.
+# NTP_SERVER = "0.pt.pool.ntp.org" # or your favorite NTP server.
+# In function sync_time() we will set: 'ntptime.host = NTP_SERVER'.
+# If we don't set ntptime.host it will default to "pool.ntp.org"
 # Added:
 # Button A: increase hour
 # Button B: decrease hour
@@ -91,7 +93,7 @@ use_sound = True
 if not classic:
     from clock_mod_digits import *
 
-use_fixed_color = False
+use_fixed_color = True
 
 vol_set = False
 
@@ -117,8 +119,8 @@ button_a = machine.Pin(gu.SWITCH_A, machine.Pin.IN, machine.Pin.PULL_UP)
 button_b = machine.Pin(gu.SWITCH_B, machine.Pin.IN, machine.Pin.PULL_UP)
 button_c = machine.Pin(gu.SWITCH_C, machine.Pin.IN, machine.Pin.PULL_UP)
 button_d = machine.Pin(gu.SWITCH_D, machine.Pin.IN, machine.Pin.PULL_UP)
-up_button = machine.Pin(gu.SWITCH_VOLUME_UP, machine.Pin.IN, machine.Pin.PULL_UP)
-down_button = machine.Pin(gu.SWITCH_VOLUME_DOWN, machine.Pin.IN, machine.Pin.PULL_UP)
+vol_up_button = machine.Pin(gu.SWITCH_VOLUME_UP, machine.Pin.IN, machine.Pin.PULL_UP)
+vol_down_button = machine.Pin(gu.SWITCH_VOLUME_DOWN, machine.Pin.IN, machine.Pin.PULL_UP)
 
 # create the rtc object
 rtc = machine.RTC()
@@ -476,8 +478,6 @@ def sync_time():
             # and: https://github.com/micropython/micropython-infineon/blob/master/esp8266/scripts/ntptime.py
             # The NTP host can be configured at runtime by doing: ntptime.host = 'myhost.org'
             ntptime.host = ntp_server
-            if not my_debug:
-                print(TAG+f"using ntptime.host = \'{ntp_server}\'")
             ntptime.settime()
             if use_sound:
                 double_tone()
@@ -505,18 +505,10 @@ def sync_time():
 # to be used in main() to calculate the elapsed time in seconds
 # 
 def epoch():
-    year, month, day, wd, hour, minute, second, _ = rtc.datetime()
-    secs = (day*(24*3600))+(hour*3600)+(minute*60)+second + (utc_offset*3600)
+    secs = time.time() + (utc_offset * 3600)
     if my_debug:
         print(f"epoch(): seconds= {secs}")
     return secs
-
-def adjust_utc_offset(pin):
-    global utc_offset
-    if pin == up_button:
-        utc_offset += 1
-    if pin == down_button:
-        utc_offset -= 1
         
 def adjust_hour(pin):
     global hour, time_chgd, do_sync
@@ -564,8 +556,6 @@ button_a.irq(trigger=machine.Pin.IRQ_FALLING, handler=adjust_hour)
 button_b.irq(trigger=machine.Pin.IRQ_FALLING, handler=adjust_hour)
 button_c.irq(trigger=machine.Pin.IRQ_FALLING, handler=adjust_minute)
 button_d.irq(trigger=machine.Pin.IRQ_FALLING, handler=adjust_minute)
-#up_button.irq(trigger=machine.Pin.IRQ_FALLING, handler=adjust_utc_offset)
-#down_button.irq(trigger=machine.Pin.IRQ_FALLING, handler=adjust_utc_offset)
 
 # Check whether the RTC time has changed and if so redraw the display
 def redraw_display_if_reqd():
@@ -574,12 +564,22 @@ def redraw_display_if_reqd():
     if time_chgd:
         rtc.datetime((year,month,day,wd,hour,minute,second,0))
         time.sleep(0.1)
-    year, month, day, wd, hour, minute, second, _ = rtc.datetime()
+    tm = time.time() + (utc_offset * 3600)
+    tm_local = time.localtime(tm)
+    if my_debug:
+        print(f"redraw_display_if_reqd(): tm_local= {tm_local}")
+    year   = tm_local[0]
+    month  = tm_local[1]
+    day    = tm_local[2]
+    hour   = tm_local[3]
+    minute = tm_local[4]
+    second = tm_local[5]
+    wd     = tm_local[6]
+    yd     = tm_local[7]
     
     if second != last_second or time_chgd:
         if time_chgd:
             time_chgd = False
-        hour += utc_offset
         time_through_day = (((hour * 60) + minute) * 60) + second
         percent_through_day = time_through_day / 86400
         percent_to_midday = 1.0 - ((math.cos(percent_through_day * math.pi * 2) + 1) / 2)
@@ -641,6 +641,8 @@ def main():
                 print(TAG+f"MicroPython release: \'{dev_dict['release']}\'")
             if 'version' in k:
                 print(TAG+f"Version: \'{dev_dict['version']}\'")
+    print(TAG+f"Timezone offset to UTC = {utc_offset} hours")
+    print(TAG+f"Using NTP server: \"{ntp_server}\"")
     gu.set_brightness(0.2)  # was: (0.5)
     #----------------------------------+
     interval_secs = 600 # 10 minutes # | <<<=== Set here the time_sync interval
