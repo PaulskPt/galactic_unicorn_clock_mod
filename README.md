@@ -66,7 +66,7 @@ Added functions:
 - play_tone();
 - double_tone();
 - my_dev(): collects the os.uname() into global 'dev_dict' dictionary. Data as: 'machine', (micropython) release and version;
-- blink(): blinks a 2x2 pixel square in the top-left corner to indicate WiFi connected (green), WiFi disconnected (red). time_sync (blue).
+- blink(): blinks a 2x2 pixel square in the top-left corner to indicate WiFi connected (green), WiFi disconnected (red). sync_time (blue).
 - is_connected: prints to REPL info about the WiFi connection status (connected/disconnected);
 - epoch(): returns number of seconds derived from: time.time() + (utc_offset * 3600) value. It is used in main() for time-controlled actions.
 - adjust_hour(): self evident;
